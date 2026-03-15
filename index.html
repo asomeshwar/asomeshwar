@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amala Someshwar — Academic Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8;
+      --ink: #1a1714;
+      --rust: #5E6F8A;
+      --muted: #7a746c;
+      --rule: #d6cfc4;
+      --card: #eee8dc;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      font-size: 13px;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+    .page { max-width: 900px; margin: 0 auto; padding: 52px 40px 100px; }
+
+    /* HEADER */
+    header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 28px;
+      padding-bottom: 28px;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 36px;
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .photo-wrap {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--rule);
+      background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-wrap .photo-placeholder {
+      font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); text-align: center; padding: 8px; line-height: 1.4;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 5vw, 54px);
+      font-weight: 700; line-height: 1.05; letter-spacing: -0.5px;
+    }
+    .title-label {
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--rust); margin-top: 6px;
+    }
+    .contact-block {
+      text-align: right; color: var(--muted);
+      font-size: 11px; line-height: 2; align-self: end; padding-bottom: 4px;
+    }
+    .contact-block a { color: var(--rust); text-decoration: none; }
+    .contact-block a:hover { text-decoration: underline; }
+
+    /* TABS */
+    .tabs {
+      display: flex; align-items: stretch;
+      margin-bottom: 44px; border-bottom: 1px solid var(--rule);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .tab-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); padding: 10px 22px 12px;
+      position: relative; transition: color 0.2s;
+    }
+    .tab-btn::after {
+      content: ''; position: absolute;
+      bottom: -1px; left: 0; right: 0; height: 2px;
+      background: var(--rust); transform: scaleX(0); transition: transform 0.25s ease;
+    }
+    .tab-btn:hover { color: var(--ink); }
+    .tab-btn.active { color: var(--ink); }
+    .tab-btn.active::after { transform: scaleX(1); }
+    .tab-btn.cv-tab {
+      margin-left: auto; color: var(--rust);
+      border: 1px solid var(--rule); border-bottom: none;
+      padding: 8px 20px 10px;
+      display: flex; align-items: center; gap: 7px;
+      border-radius: 3px 3px 0 0;
+      background: var(--card);
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn.cv-tab:hover { background: var(--rule); color: var(--ink); }
+    .tab-btn.cv-tab.active { background: var(--rust); color: var(--cream); }
+    .tab-btn.cv-tab.active::after { display: none; }
+    .tab-btn.cv-tab svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    /* PANELS */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp 0.4s ease forwards; }
+
+    /* SECTIONS */
+    section { margin-bottom: 44px; }
+    .section-label {
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+    .pull-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 15px; line-height: 1.7;
+      max-width: 680px;
+      border-left: 3px solid var(--rust); padding-left: 20px;
+    }
+
+    /* ENTRIES */
+    .entry {
+      display: grid; grid-template-columns: 140px 1fr;
+      gap: 0 28px; padding: 18px 0; border-bottom: 1px solid var(--rule);
+    }
+    .entry:last-child { border-bottom: none; }
+    .entry-meta { color: var(--muted); font-size: 11px; padding-top: 2px; line-height: 1.9; }
+    .entry-date { color: var(--rust); font-size: 11px; }
+    .entry-org { font-size: 11px; }
+    .entry-role {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px; font-weight: 700; margin-bottom: 5px;
+    }
+    .entry-desc { color: #4a443e; font-size: 12.5px; }
+
+    /* RESEARCH CARDS */
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap: 16px;
+    }
+    .research-card {
+      background: var(--card); border-left: 3px solid var(--rust); padding: 20px 22px;
+    }
+    .research-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; font-weight: 700; margin-bottom: 8px;
+    }
+    .research-card p { font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .research-card .tag {
+      display: inline-block; font-size: 10px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--rust); margin-top: 12px;
+    }
+
+    /* PUBLICATIONS */
+    .pub-entry { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+    .pub-entry:last-child { border-bottom: none; }
+    .pub-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 14px; margin-bottom: 4px;
+    }
+    .pub-meta { font-size: 11px; color: var(--muted); }
+    .pub-meta a { color: var(--rust); text-decoration: none; }
+    .pub-meta a:hover { text-decoration: underline; }
+    .pub-status {
+      display: inline-block; font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--rust);
+      border: 1px solid var(--rust); border-radius: 2px;
+      padding: 1px 6px; margin-left: 8px; vertical-align: middle;
+    }
+
+    /* TEACHING */
+    .course-entry {
+      display: grid; grid-template-columns: 140px 1fr;
+      gap: 0 28px; padding: 16px 0; border-bottom: 1px solid var(--rule);
+    }
+    .course-entry:last-child { border-bottom: none; }
+    .course-code { font-size: 11px; color: var(--rust); }
+    .course-term { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .course-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; font-weight: 700; margin-bottom: 4px;
+    }
+    .course-desc { font-size: 12px; color: var(--muted); }
+
+    /* CV DOWNLOAD */
+    .cv-panel {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 60px 20px; text-align: center; gap: 28px;
+    }
+    .cv-panel-icon {
+      width: 64px; height: 80px; background: var(--card);
+      border: 2px solid var(--rule); border-radius: 4px;
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .cv-panel-icon::before {
+      content: ''; position: absolute; top: -1px; right: -1px;
+      width: 18px; height: 18px; background: var(--cream);
+      border-left: 2px solid var(--rule); border-bottom: 2px solid var(--rule);
+    }
+    .cv-panel-icon svg { color: var(--rust); }
+    .cv-panel h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+    .cv-panel p { font-size: 12px; color: var(--muted); max-width: 380px; line-height: 1.8; }
+    .download-btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--rust); color: var(--cream);
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none; padding: 13px 28px; border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .download-btn:hover { background: #4a5870; transform: translateY(-1px); }
+    .download-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .cv-note { font-size: 11px; color: var(--muted); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 620px) {
+      .page { padding: 28px 18px 60px; }
+      header { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
+      .contact-block { grid-column: 1 / -1; text-align: left; }
+      .photo-wrap { width: 72px; height: 72px; }
+      .entry, .course-entry { grid-template-columns: 1fr; gap: 4px; }
+      .tab-btn { padding: 10px 10px 12px; font-size: 9px; }
+      .tab-btn.cv-tab { padding: 8px 12px 10px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="photo-wrap">
+      <img src="photo.jpg" alt="Photo of Amala Someshwar"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+      <span class="photo-placeholder" style="display:none;">Your<br/>Photo</span>
+    </div>
+    <div>
+      <h1>Amala Someshwar</h1>
+      <p class="title-label">PhD Candidate · Department of Psychology · University of Oregon</p>
+    </div>
+    <div class="contact-block">
+      <a href="mailto:asomeshw@uoregon.edu">asomeshw@uoregon.edu</a><br/>
+      <a href="https://scholar.google.com" target="_blank">Google Scholar</a> &nbsp;/&nbsp;
+      <a href="https://github.com/asomeshwar" target="_blank">GitHub</a><br/>
+      Eugene, Oregon
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="education">Education</button>
+    <button class="tab-btn" data-tab="research">Research</button>
+    <button class="tab-btn" data-tab="teaching">Teaching</button>
+    <button class="tab-btn cv-tab" data-tab="cv-download">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+      </svg>
+      CV
+    </button>
+  </nav>
+
+
+  <!-- ═══════════ EDUCATION ═══════════ -->
+  <div class="tab-panel active" id="education">
+
+    <section>
+      <div class="section-label">About</div>
+      <p class="pull-quote">
+        I am a PhD Candidate in Psychology at the University of Oregon, where I am advised by
+        Sara J. Weston and Jennifer H. Pfeifer. My research examines how adolescents and young
+        adults navigate close relationships with parents and peers, and how everyday interpersonal
+        dynamics shape personality development, self-esteem, and mental health over time. I am
+        particularly interested in perception discrepancies — the gaps between how individuals see
+        themselves and how significant others perceive them. I use multilevel modeling, structural
+        equation modeling, network analysis, and computational text analysis.
+      </p>
+    </section>
+
+    <section>
+      <div class="section-label">Degrees</div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="entry-date">2021 — Present</div>
+          <div class="entry-org">University of Oregon</div>
+        </div>
+        <div>
+          <div class="entry-role">PhD Candidate, Psychology</div>
+          <div class="entry-desc">
+            Dissertation: "Navigating Adolescence: The Dynamics of Dyads, Perception, and Personality in Youth Development"<br/>
+            Advisors: Jennifer Pfeifer, PhD &amp; Sara Weston, PhD
+          </div>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="entry-date">2021 — 2022</div>
+          <div class="entry-org">University of Oregon</div>
+        </div>
+        <div>
+          <div class="entry-role">M.S., Psychology</div>
+          <div class="entry-desc">
+            Thesis: "Does how we view our friendship matter?: Global vs daily friendship perceptions and internalizing symptoms in adolescence."
+          </div>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="entry-date">2014 — 2018</div>
+          <div class="entry-org">Bryn Mawr College</div>
+        </div>
+        <div>
+          <div class="entry-role">B.A., Psychology</div>
+          <div class="entry-desc">
+            Honors Thesis: "War, What Is It Good For?: Examining Marital Satisfaction and Stability Following World War II"<br/>
+            Advisor: Marc Schulz, PhD
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-label">Honors &amp; Awards</div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="entry-date">2026</div>
+          <div class="entry-org">University of Oregon</div>
+        </div>
+        <div>
+          <div class="entry-role">Lorry I. Lokey Interdisciplinary Science Initiative Dissertation Award</div>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="entry-date">2025</div>
+          <div class="entry-org">University of Oregon</div>
+        </div>
+        <div>
+          <div class="entry-role">Excellence Award for Graduate Teaching</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+
+  <!-- ═══════════ RESEARCH ═══════════ -->
+  <div class="tab-panel" id="research">
+
+    <section>
+      <div class="section-label">Current Research Interests</div>
+      <div class="research-grid">
+
+        <div class="research-card">
+          <h3>Adolescent Relationship Dynamics</h3>
+          <p>Examining how adolescents and young adults navigate close relationships with parents and peers, and how these dynamics unfold across daily life.</p>
+          <span class="tag">Ongoing</span>
+        </div>
+
+        <div class="research-card">
+          <h3>Perception Discrepancies</h3>
+          <p>Investigating discrepancies between how individuals see themselves, their relationships, and their everyday experiences, and how close others perceive those same targets — and what these gaps (or lack thereof) mean for mental health and well-being.</p>
+          <span class="tag">Ongoing</span>
+        </div>
+
+        <div class="research-card">
+          <h3>Personality Development &amp; Mental Health</h3>
+          <p>Studying how everyday interpersonal dynamics shape personality development, self-esteem, and mental health trajectories over time.</p>
+          <span class="tag">Ongoing</span>
+        </div>
+
+        <div class="research-card">
+          <h3>Computational Approaches to Naturalistic Speech</h3>
+          <p>Topic modeling approaches to naturalistic individual and dyadic speech.</p>
+          <span class="tag">Ongoing</span>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <div class="section-label">Publications &amp; Works in Progress</div>
+
+      <div class="pub-entry">
+        <div class="pub-title">Mapping Developmental Change in Adolescent Girls' Language Using Structural Topic Modeling</div>
+        <div class="pub-meta">
+          Someshwar, A., Weston, S. J., Pfeifer, J.
+          <span class="pub-status">In Progress</span>
+        </div>
+      </div>
+
+      <div class="pub-entry">
+        <div class="pub-title">Mapping Everyday Parent-Adolescent Conversations Using Structural Topic Modeling</div>
+        <div class="pub-meta">
+          Someshwar, A., Weston, S. J., Chen, M., Bai, S.
+          <span class="pub-status">In Progress</span>
+        </div>
+      </div>
+
+      <div class="pub-entry">
+        <div class="pub-title">Daily Close Friendship Experiences in Girls: Links to Daily Affective States</div>
+        <div class="pub-meta">
+          Someshwar, A., Weston, S. J., Schacter, H. &amp; Pfeifer, J.
+          <span class="pub-status">Under Review</span>
+        </div>
+      </div>
+
+      <div class="pub-entry">
+        <div class="pub-title">Do parents and children agree?: A longitudinal study of discrepancies in perceptions over time</div>
+        <div class="pub-meta">
+          Someshwar, A., Weston, S. J., Beck, E. D., Robins, R.
+          <span class="pub-status">In Prep</span>
+        </div>
+      </div>
+
+    </section>
+
+    <section>
+      <div class="section-label">Past Research</div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="entry-date">2021 — 2022</div>
+          <div class="entry-org">M.S. Thesis</div>
+        </div>
+        <div>
+          <div class="entry-role">Global vs. Daily Friendship Perceptions</div>
+          <div class="entry-desc">
+            Examined whether how adolescents globally perceive their friendships differs from daily-level perceptions, and how both relate to internalizing symptoms.
+          </div>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-meta">
+          <div class="entry-date">2014 — 2018</div>
+          <div class="entry-org">B.A. Honors Thesis</div>
+        </div>
+        <div>
+          <div class="entry-role">Marital Outcomes Following World War II</div>
+          <div class="entry-desc">
+            Investigated marital satisfaction and stability among couples affected by World War II, advised by Marc Schulz, PhD at Bryn Mawr College.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+
+  <!-- ═══════════ TEACHING ═══════════ -->
+  <div class="tab-panel" id="teaching">
+
+    <section>
+      <div class="section-label">Teaching Philosophy</div>
+      <p class="pull-quote">
+        I teach psychology as both a science and a practice — building students' confidence, curiosity, and critical thinking through active learning, inclusive pedagogy, and a deep belief that rigor and compassion are inseparable.
+      </p>
+    </section>
+
+    <section>
+      <div class="section-label">Past Courses</div>
+
+      <div class="course-entry">
+        <div>
+          <div class="course-code">PSY 302</div>
+          <div class="course-term">Fall 2023, Winter 2024, Spring 2024</div>
+        </div>
+        <div>
+          <div class="course-title">Statistical Methods in Psychology</div>
+          <div class="course-desc">An undergraduate introduction to descriptive and inferential statistics, covering hypothesis testing, ANOVA, correlation, and regression.</div>
+        </div>
+      </div>
+
+      <div class="course-entry">
+        <div>
+          <div class="course-code">PSY 303</div>
+          <div class="course-term">Fall 2024, Winter 2025, Spring 2025, Fall 2025, Winter 2026</div>
+        </div>
+        <div>
+          <div class="course-title">Research Methods in Psychology</div>
+          <div class="course-desc">An undergraduate introduction to empirical research methods, guiding students through the full arc of a psychology study — from literature review and data analysis to APA-style writing and poster presentation.</div>
+        </div>
+      </div>
+
+      <div class="course-entry">
+        <div>
+          <div class="course-code">PSY 308</div>
+          <div class="course-term">Summer 2023</div>
+        </div>
+        <div>
+          <div class="course-title">Developmental Psychology</div>
+          <div class="course-desc">An introductory survey of human development across the lifespan, examining biological, cognitive, and socioemotional change from infancy through adulthood through a scientific, research-grounded lens.</div>
+        </div>
+      </div>
+
+      <div class="course-entry">
+        <div>
+          <div class="course-code">PSY 428</div>
+          <div class="course-term">Summer 2024, Summer 2025</div>
+        </div>
+        <div>
+          <div class="course-title">Social Development</div>
+          <div class="course-desc">An upper-division exploration of social and emotional development from infancy through adolescence, covering attachment, peer relationships, identity, and the cultural and contextual factors that shape socioemotional growth.</div>
+        </div>
+      </div>
+
+    </section>
+
+    <section>
+      <div class="section-label">Mentoring</div>
+      <p style="font-size:12.5px; color: var(--muted); max-width: 580px; line-height: 1.8;">
+        I actively mentor undergraduate research assistants in the lab, supporting them through
+        the research process from study design to data analysis. I welcome inquiries from
+        students interested in developmental psychology and quantitative methods.
+      </p>
+    </section>
+
+  </div>
+
+
+  <!-- ═══════════ CV DOWNLOAD ═══════════ -->
+  <div class="tab-panel" id="cv-download">
+    <div class="cv-panel">
+
+      <div class="cv-panel-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+
+      <h2>Curriculum Vitae</h2>
+
+      <p>
+        Download a full copy of my CV, including complete publication list,
+        conference presentations, grants, and service record.
+        Last updated <strong>March 2026</strong>.
+      </p>
+
+      <a href="cv.pdf" download class="download-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download CV (PDF)
+      </a>
+
+      <span class="cv-note">PDF · Updated March 2026</span>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const btns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
